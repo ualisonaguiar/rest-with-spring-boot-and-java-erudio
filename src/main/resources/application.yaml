@@ -1,3 +1,16 @@
 spring:
   application:
     name: rest-with-spring-boot-and-java-erudio
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DATABASE:erudio}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:abcd1234}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+    show-sql: true
+    open-in-view: false    
+
