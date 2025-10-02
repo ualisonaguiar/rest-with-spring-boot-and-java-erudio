@@ -1,10 +1,14 @@
 package br.github.service;
 
+import static br.github.mapper.ObjectMapper.parseListObjects;
+import static br.github.mapper.ObjectMapper.parseObject;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
+import br.github.data.dto.PersonDTO;
 import br.github.exception.ResourceNotFoundException;
 import br.github.model.Person;
 import br.github.repository.PersonRepository;
@@ -20,46 +24,45 @@ public class PersonService {
 
     private final PersonRepository repository;
 
-    public List<Person> findAll() {
+    public List<PersonDTO> findAll() {
         log.info("Finding All Person!");
 
-        return repository.findAll();
+        return parseListObjects(repository.findAll(), PersonDTO.class);
     }
 
-    public Person findById(final Long id) {
+    public PersonDTO findById(final Long id) {
 
         log.info("Finding one Person!");
 
-        return repository.findById(id)
+        Person person = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+        return parseObject(person, PersonDTO.class);
     }
 
-    public Person create(Person person) {
+    public PersonDTO create(PersonDTO personDTO) {
         log.info("Saving one Person!");
-        repository.save(person);
+        var person = repository.save(parseObject(personDTO, Person.class));
 
-        return person;
+        return parseObject(person, PersonDTO.class);
     }
 
-    public Person update(Person person) {
+    public PersonDTO update(PersonDTO personDTO) {
         log.info("updating one Person!");
 
-        Person entity = findById(person.getId());
+        findById(personDTO.getId());
 
-        entity.setFirtName(person.getFirtName());
-        entity.setLastName(person.getLastName());
-        entity.setAddress(person.getAddress());
-        entity.setGender(person.getGender());
+        Person person = repository.save(parseObject(personDTO, Person.class));
 
-        repository.save(entity);
-
-        return entity;
+        return parseObject(person, PersonDTO.class);
     }
 
     public void delete(final Long id) {
         log.info("deleting one Person!");
 
-        repository.delete(findById(id));
+        var personDTO = findById(id);
+
+        repository.delete(parseObject(personDTO, Person.class));
     }
 
 }

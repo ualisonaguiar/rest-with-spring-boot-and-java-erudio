@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.github.model.Person;
+import br.github.data.dto.PersonDTO;
 import br.github.service.PersonService;
 import lombok.AllArgsConstructor;
 
@@ -24,29 +24,29 @@ public class PersonController {
     private final PersonService service;
 
     @GetMapping
-    public List<Person> findAll() {
+    public List<PersonDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public Person findById(@PathVariable("id") Long id) {
+    public PersonDTO findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
 
     @PostMapping
-    public Person create(@RequestBody Person person) {
+    public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
     }
 
     @PutMapping
-    public Person update(@RequestBody Person person) {
+    public PersonDTO update(@RequestBody PersonDTO person) {
         return service.update(person);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         service.delete(id);
-        
+
         return ResponseEntity.noContent().build();
     }
 }
