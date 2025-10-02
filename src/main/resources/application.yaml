@@ -12,5 +12,8 @@ spring:
     properties:
       hibernate:
     show-sql: true
-    open-in-view: false    
+    open-in-view: false
 
+logging:
+  level:
+    br.github: DEBUG
