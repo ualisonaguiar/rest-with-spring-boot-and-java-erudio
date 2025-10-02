@@ -3,7 +3,7 @@ package br.github.mapper.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.github.data.dto.PersonDTO;
+import br.github.data.dto.v1.PersonDTO;
 import br.github.model.Person;
 
 public class MockPerson {

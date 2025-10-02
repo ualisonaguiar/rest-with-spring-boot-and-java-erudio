@@ -1,15 +1,15 @@
 package br.github.mapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static br.github.mapper.ObjectMapper.parseObject;
 import static br.github.mapper.ObjectMapper.parseListObjects;
+import static br.github.mapper.ObjectMapper.parseObject;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.github.data.dto.PersonDTO;
+import br.github.data.dto.v1.PersonDTO;
 import br.github.mapper.mocks.MockPerson;
 import br.github.model.Person;
 

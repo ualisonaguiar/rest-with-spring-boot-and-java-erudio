@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.github.data.dto.PersonDTO;
+import br.github.data.dto.v1.PersonDTO;
 import br.github.service.PersonService;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/person")
+@RequestMapping("/api/person/v1")
 public class PersonController {
 
     private final PersonService service;
@@ -37,6 +37,11 @@ public class PersonController {
     public PersonDTO create(@RequestBody PersonDTO person) {
         return service.create(person);
     }
+
+    // @PostMapping("/v2")
+    // public PersonDTOV2 create(@RequestBody PersonDTOV2 person) {
+    //     return service.createV2(person);
+    // }    
 
     @PutMapping
     public PersonDTO update(@RequestBody PersonDTO person) {
