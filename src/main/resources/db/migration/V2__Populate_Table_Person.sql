@@ -1,4 +1,4 @@
-INSERT INTO person (address, first_name, gender, last_name) VALUES
+INSERT INTO tb_pessoa (endereco, primeiro_nome, genero, ultimo_nome) VALUES
     ('São Paulo - Brasil', 'Ayrton', 'Male', 'Senna'),
     ('Anchiano - Italy', 'Leonardo', 'Male', 'da Vinci'),
     ('Porbandar - India', 'Indira', 'Female', 'Gandhi'),
