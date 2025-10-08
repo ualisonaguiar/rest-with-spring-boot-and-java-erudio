@@ -1,7 +1,9 @@
 package br.github.controllers;
 
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,14 +25,22 @@ public class PersonController {
 
     private final PersonService service;
 
-    @GetMapping
+    @GetMapping(produces = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE })
     public List<PersonDTO> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
     public PersonDTO findById(@PathVariable("id") Long id) {
-        return service.findById(id);
+        var person = service.findById(id);
+
+        person.setBirthDay(new Date());
+        person.setPhoneNumber("+5561986011959");
+        person.setSensitiveData("Foo Bar");
+
+        return person;
     }
 
     @PostMapping
@@ -40,8 +50,8 @@ public class PersonController {
 
     // @PostMapping("/v2")
     // public PersonDTOV2 create(@RequestBody PersonDTOV2 person) {
-    //     return service.createV2(person);
-    // }    
+    // return service.createV2(person);
+    // }
 
     @PutMapping
     public PersonDTO update(@RequestBody PersonDTO person) {
