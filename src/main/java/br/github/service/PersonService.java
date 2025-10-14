@@ -4,10 +4,12 @@ import static br.github.mapper.ObjectMapper.parseListObjects;
 import static br.github.mapper.ObjectMapper.parseObject;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import br.github.controllers.PersonController;
 import br.github.data.dto.v1.PersonDTO;
 import br.github.data.dto.v2.PersonDTOV2;
 import br.github.exception.ResourceNotFoundException;
@@ -28,7 +30,10 @@ public class PersonService {
     public List<PersonDTO> findAll() {
         log.info("Finding All Person!");
 
-        return parseListObjects(repository.findAll(), PersonDTO.class);
+        var persons = parseListObjects(repository.findAll(), PersonDTO.class);
+
+        persons.forEach(this::addHateoasLinks);
+        return persons;
     }
 
     public PersonDTO findById(final Long id) {
@@ -38,14 +43,20 @@ public class PersonService {
         Person person = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        return parseObject(person, PersonDTO.class);
+        var dto = parseObject(person, PersonDTO.class);
+
+        addHateoasLinks(dto);
+
+        return dto;
     }
 
     public PersonDTO create(PersonDTO personDTO) {
         log.info("Saving one Person!");
         var person = repository.save(parseObject(personDTO, Person.class));
 
-        return parseObject(person, PersonDTO.class);
+        var dto = parseObject(person, PersonDTO.class);
+        addHateoasLinks(dto);
+        return dto;
     }
 
     public PersonDTOV2 createV2(PersonDTOV2 personDTO) {
@@ -62,7 +73,10 @@ public class PersonService {
 
         Person person = repository.save(parseObject(personDTO, Person.class));
 
-        return parseObject(person, PersonDTO.class);
+        var dto = parseObject(person, PersonDTO.class);
+
+        addHateoasLinks(dto);
+        return dto;
     }
 
     public void delete(final Long id) {
@@ -73,4 +87,11 @@ public class PersonService {
         repository.delete(parseObject(personDTO, Person.class));
     }
 
+    private void addHateoasLinks(PersonDTO dto) {
+        dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
+        dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
+        dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("put").withType("PUT"));
+    }
 }
