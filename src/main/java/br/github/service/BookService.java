@@ -8,11 +8,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import br.github.controllers.BookController;
 import br.github.data.dto.v1.BookDTO;
-import br.github.data.dto.v1.PersonDTO;
 import br.github.exception.ResourceNotFoundException;
 import br.github.model.Book;
 import br.github.repository.BookRepository;
@@ -70,7 +68,7 @@ public class BookService {
         addHateoasLinks(bookDTO);
 
         return bookDTO;
-    }    
+    }
 
     private void addHateoasLinks(BookDTO dto) {
         dto.add(linkTo(methodOn(BookController.class).findById(dto.getId())).withSelfRel().withType("GET"));
