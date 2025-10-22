@@ -2,12 +2,12 @@ package br.github.service;
 
 import static br.github.mapper.ObjectMapper.parseListObjects;
 import static br.github.mapper.ObjectMapper.parseObject;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import br.github.controllers.PersonController;
 import br.github.data.dto.v1.PersonDTO;

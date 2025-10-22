@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.github.controllers.docs.BookControllerDocs;
 import br.github.data.dto.v1.BookDTO;
-import br.github.data.dto.v1.PersonDTO;
 import br.github.model.Book;
 import br.github.service.BookService;
 import io.swagger.v3.oas.annotations.tags.Tag;

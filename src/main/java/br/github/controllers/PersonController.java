@@ -1,6 +1,5 @@
 package br.github.controllers;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;

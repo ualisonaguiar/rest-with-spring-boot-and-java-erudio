@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class Book {
     @Column(name = "titulo", nullable = false, length = 100)
     private String title;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "data_lancamento", nullable = false)
     private Date launchDate;
 
