@@ -1,11 +1,31 @@
 services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - 8080:8080
+    environment:
+      - POSTGRES_DB=erudio
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=abcd1234
+    depends_on:
+      - database
+    networks:
+      - udemy-java-erudio
+
   database:
     container_name: database
     image: postgres:latest
     environment:
-      POSTGRES_DB: ${POSTGRES_DATABASE}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATA: /data/postgres
+      - POSTGRES_DB=erudio
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=abcd1234
+      - PGDATA=/data/postgres
     ports:
       - 5432:5432
+    networks:
+      - udemy-java-erudio
+
+networks:
+  udemy-java-erudio:
+    driver: bridge
