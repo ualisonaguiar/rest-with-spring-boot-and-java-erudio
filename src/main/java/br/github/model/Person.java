@@ -34,4 +34,7 @@ public class Person {
 
     @Column(name = "genero", nullable = false, length = 12)
     private String gender;
+
+    @Column(name = "ativo", nullable = false)
+    private Boolean enable;
 }

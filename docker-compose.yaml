@@ -8,6 +8,7 @@ services:
       - POSTGRES_DB=erudio
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=abcd1234
+      - SPRING_PROFILES_ACTIVE=dev
     depends_on:
       - database
     networks:

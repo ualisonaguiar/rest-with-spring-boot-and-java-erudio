@@ -4,5 +4,6 @@ CREATE TABLE tb_pessoa (
     primeiro_nome VARCHAR(80) NOT NULL,
     ultimo_nome VARCHAR(80) NOT NULL,
     endereco VARCHAR(100) NOT NULL,
-    genero VARCHAR(6) NOT NULL
+    genero VARCHAR(6) NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE
 );

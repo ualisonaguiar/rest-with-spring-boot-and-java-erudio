@@ -7,6 +7,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import br.github.controllers.PersonController;
@@ -36,6 +37,7 @@ public class PersonService {
         return persons;
     }
 
+    @Cacheable(value = "persons", key = "#id")
     public PersonDTO findById(final Long id) {
 
         log.info("Finding one Person!");

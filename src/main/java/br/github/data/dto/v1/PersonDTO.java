@@ -10,12 +10,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import br.github.serializer.GenderSerializer;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode
 @JsonFilter("PersonFilter")
 public class PersonDTO extends RepresentationModel<PersonDTO> {
@@ -38,4 +36,6 @@ public class PersonDTO extends RepresentationModel<PersonDTO> {
     private Date birthDay;
 
     private String sensitiveData;
+
+    private Boolean enable;
 }
