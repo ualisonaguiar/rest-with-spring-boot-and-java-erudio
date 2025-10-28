@@ -1,9 +1,8 @@
-package br.github.mapper.service;
+package br.github.service;
 
 import static br.github.mapper.ObjectMapper.parseObject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -26,7 +25,6 @@ import br.github.data.dto.v1.BookDTO;
 import br.github.exception.ResourceNotFoundException;
 import br.github.model.Book;
 import br.github.repository.BookRepository;
-import br.github.service.BookService;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {

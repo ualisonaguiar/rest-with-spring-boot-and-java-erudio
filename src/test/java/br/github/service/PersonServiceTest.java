@@ -1,4 +1,4 @@
-package br.github.mapper.service;
+package br.github.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.github.data.dto.v1.PersonDTO;
 import br.github.model.Person;
 import br.github.repository.PersonRepository;
-import br.github.service.PersonService;
 
 @ExtendWith(MockitoExtension.class)
 class PersonServiceTest {
