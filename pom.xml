@@ -120,7 +120,7 @@
 			<groupId>io.rest-assured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>

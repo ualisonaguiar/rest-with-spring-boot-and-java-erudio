@@ -1,57 +1,93 @@
 package br.github.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import br.github.data.dto.v1.PersonDTO;
+import br.github.mapper.ObjectMapper;
 import br.github.model.Person;
 import br.github.repository.PersonRepository;
+import br.github.testcontainers.AbstractIntegrationTest;
 
-@ExtendWith(MockitoExtension.class)
-class PersonServiceTest {
+@SpringBootTest
+class PersonServiceTest extends AbstractIntegrationTest {
 
     private static final AtomicLong COUNTER = new AtomicLong(0);
 
-    @Mock
+    @Autowired
     private PersonRepository repository;
 
-    @InjectMocks
+    @Autowired
     private PersonService service;
 
     @Test
-    void findAll() {
-        List<Person> persons = new ArrayList<>();
-        for (int i = 0; i <= 20; i++) {
-            persons.add(generateEntity());
-        }
+    void deveInserirPessoa() {
+        PersonDTO criado = service.create(criarPessoaDTO());
 
-        when(repository.findAll()).thenReturn(persons);
-
-        List<PersonDTO> personDb = service.findAll();
-        assertEquals(persons.size(), personDb.size());
+        assertNotNull(criado.getId());
+        assertTrue(repository.findById(criado.getId()).isPresent());
     }
 
-    Person generateEntity() {
-        Long id = COUNTER.incrementAndGet();
+    @Test
+    void deveListarPessoas() {
+        PersonDTO criado = criarPessoaNoBanco();
 
-        Person person = new Person();
-        person.setAddress("Brasília - DF");
-        person.setFirstName("João Paulo - " + id);
-        person.setGender("M");
-        person.setId(id);
-        person.setLastName("Rodrigues");
+        List<Person> pessoas = repository.findAll();
 
-        return person;
+        boolean existe = pessoas.stream().anyMatch(p -> p.getId().equals(criado.getId()));
+        assertTrue(existe);
     }
 
+    @Test
+    void deveAtualizarPessoa() {
+        PersonDTO criado = criarPessoaNoBanco();
+
+        criado.setFirstName("Ualison");
+        criado.setLastName("Aguiar");
+
+        PersonDTO atualizado = service.update(criado);
+        Person encontrado = repository.findById(atualizado.getId()).orElseThrow();
+
+        assertEquals(criado.getFirstName(), encontrado.getFirstName());
+        assertEquals(criado.getLastName(), encontrado.getLastName());
+    }
+
+    @Test
+    void deveExcluirPessoa() {
+        PersonDTO criado = criarPessoaNoBanco();
+
+        service.delete(criado.getId());
+
+        boolean aindaExiste = repository.findById(criado.getId()).isPresent();
+        assertFalse(aindaExiste);
+    }
+
+    private PersonDTO criarPessoaDTO() {
+        Person entity = gerarEntidadeFake();
+        PersonDTO dto = ObjectMapper.parseObject(entity, PersonDTO.class);
+        dto.setId(null);
+        return dto;
+    }
+
+    private PersonDTO criarPessoaNoBanco() {
+        return service.create(criarPessoaDTO());
+    }
+
+    private Person gerarEntidadeFake() {
+        long id = COUNTER.incrementAndGet();
+        Person p = new Person();
+        p.setAddress("Brasília - DF");
+        p.setFirstName("João Paulo - " + id);
+        p.setGender("M");
+        p.setId(id);
+        p.setLastName("Rodrigues");
+        return p;
+    }
 }
