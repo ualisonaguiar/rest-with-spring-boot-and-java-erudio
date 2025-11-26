@@ -2,6 +2,13 @@ package br.github.controllers;
 
 import java.util.List;
 
+import org.springdoc.core.converters.models.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.github.controllers.docs.PersonControllerDocs;
@@ -30,8 +38,14 @@ public class PersonController implements PersonControllerDocs {
 
     @GetMapping()
     @Override
-    public List<PersonDTO> findAll() {
-        return service.findAll();
+    public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer pageSize,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+
+        var sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(sortDirection, "firstName"));
+
+        return ResponseEntity.ok(service.findAll(pageable));
     }
 
     @GetMapping("/{id}")
@@ -61,7 +75,7 @@ public class PersonController implements PersonControllerDocs {
         return ResponseEntity.noContent().build();
     }
 
-    @Override    
+    @Override
     @PatchMapping("/{id}")
     public PersonDTO disablePerson(@PathVariable("id") Long id) {
         return service.disablePerson(id);
