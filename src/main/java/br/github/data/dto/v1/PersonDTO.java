@@ -37,5 +37,5 @@ public class PersonDTO extends RepresentationModel<PersonDTO> {
 
     private String sensitiveData;
 
-    private Boolean enable;
+    private Boolean situacao;
 }

@@ -17,6 +17,7 @@ import br.github.exception.ResourceNotFoundException;
 import br.github.mapper.custom.PersonMapper;
 import br.github.model.Person;
 import br.github.repository.PersonRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -89,11 +90,26 @@ public class PersonService {
         repository.delete(parseObject(personDTO, Person.class));
     }
 
+    @Transactional
+    public PersonDTO disablePerson(final Long id) {
+        log.info("Disabling one Person!");
+
+        findById(id);
+
+        repository.disablePerson(id);
+
+        var dto = parseObject(findById(id), PersonDTO.class);
+        addHateoasLinks(dto);
+
+        return dto;
+    }
+
     private void addHateoasLinks(PersonDTO dto) {
         dto.add(linkTo(methodOn(PersonController.class).findById(dto.getId())).withSelfRel().withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
         dto.add(linkTo(methodOn(PersonController.class).findAll()).withRel("findAll").withType("GET"));
         dto.add(linkTo(methodOn(PersonController.class).create(dto)).withRel("create").withType("POST"));
         dto.add(linkTo(methodOn(PersonController.class).update(dto)).withRel("put").withType("PUT"));
+        dto.add(linkTo(methodOn(PersonController.class).disablePerson(dto.getId())).withRel("patch").withType("PATCH"));
     }
 }

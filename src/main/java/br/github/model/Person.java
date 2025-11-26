@@ -14,9 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_pessoa")
 @EqualsAndHashCode
 @RequiredArgsConstructor
+@Table(name = "tb_pessoa")
 public class Person {
 
     @Id
@@ -37,4 +37,7 @@ public class Person {
 
     @Column(name = "ativo", nullable = false)
     private Boolean enable;
+
+    @Column(name = "situacao", nullable = false)
+    private Boolean situacao;
 }

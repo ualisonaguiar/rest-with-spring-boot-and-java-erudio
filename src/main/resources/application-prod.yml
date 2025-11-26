@@ -1,3 +1,5 @@
+cors:
+  originPatterns: http://estudo.eruido.com.br
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
