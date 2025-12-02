@@ -3,6 +3,7 @@ package br.github.data.dto.v1;
 import java.util.Date;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,6 +17,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode
 @JsonFilter("PersonFilter")
+@Relation(collectionRelation = "person")
 public class PersonDTO extends RepresentationModel<PersonDTO> {
 
     private Long id;

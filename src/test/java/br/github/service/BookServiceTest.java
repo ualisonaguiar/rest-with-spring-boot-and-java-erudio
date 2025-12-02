@@ -20,6 +20,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 
 import br.github.data.dto.v1.BookDTO;
 import br.github.exception.ResourceNotFoundException;
@@ -46,12 +49,15 @@ class BookServiceTest {
         }
 
         when(repository.findAll()).thenReturn(books);
-        List<BookDTO> result = service.findAll();
-        assertEquals(books.size(), result.size());
+        PagedModel<EntityModel<BookDTO>> result = service.findAll(PageRequest.of(1, 12));
+
+        assertEquals(books.size(), result.getContent().size());
+
+        List<EntityModel<BookDTO>> content = new ArrayList<>(result.getContent());
 
         for (int i = 0; i < books.size(); i++) {
             Book expected = books.get(i);
-            Book actual = parseObject(result.get(i), Book.class);
+            Book actual = parseObject(content.get(i).getContent(), Book.class);
 
             assertEquals(expected.getAuthor(), actual.getAuthor());
             assertEquals(expected.getTitle(), actual.getTitle());

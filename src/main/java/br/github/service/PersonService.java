@@ -53,7 +53,7 @@ public class PersonService {
                                 pageable.getPageSize(),
                                 String.valueOf(pageable.getSort())))
                 .withSelfRel();
-                
+
         return assembler.toModel(peopleWithLinks, findAllLink);
     }
 
@@ -121,6 +121,29 @@ public class PersonService {
         addHateoasLinks(dto);
 
         return dto;
+    }
+
+    public PagedModel<EntityModel<PersonDTO>> findByName(String firstName, Pageable pageable) {
+        log.info("Finding All Person!");
+
+        Page<Person> people = repository.findPeopleByName(firstName, pageable);
+
+        var peopleWithLinks = people.map(person -> {
+            PersonDTO personDTO = parseObject(person, PersonDTO.class);
+            addHateoasLinks(personDTO);
+
+            return personDTO;
+        });
+
+        Link findAllLink = WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(PersonController.class)
+                        .findAll(
+                                pageable.getPageNumber(),
+                                pageable.getPageSize(),
+                                String.valueOf(pageable.getSort())))
+                .withSelfRel();
+
+        return assembler.toModel(peopleWithLinks, findAllLink);
     }
 
     private void addHateoasLinks(PersonDTO dto) {

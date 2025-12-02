@@ -1,7 +1,9 @@
 package br.github.controllers;
 
-import java.util.List;
-
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.github.controllers.docs.BookControllerDocs;
@@ -28,8 +31,14 @@ public class BookController implements BookControllerDocs {
     private final BookService service;
 
     @GetMapping()
-    public List<BookDTO> findAll() {
-        return service.findAll();
+    public ResponseEntity<PagedModel<EntityModel<BookDTO>>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer pageSize,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+
+        var sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(sortDirection, "title"));
+
+        return ResponseEntity.ok(service.findAll(pageable));
     }
 
     @GetMapping("/{id}")

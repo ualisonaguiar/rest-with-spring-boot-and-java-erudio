@@ -38,7 +38,8 @@ public class PersonController implements PersonControllerDocs {
 
     @GetMapping()
     @Override
-    public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
+    public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findAll(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer pageSize,
             @RequestParam(value = "direction", defaultValue = "asc") String direction) {
 
@@ -79,5 +80,18 @@ public class PersonController implements PersonControllerDocs {
     @PatchMapping("/{id}")
     public PersonDTO disablePerson(@PathVariable("id") Long id) {
         return service.disablePerson(id);
+    }
+
+    @GetMapping("/findByName/{firstName}")
+    public ResponseEntity<PagedModel<EntityModel<PersonDTO>>> findByName(
+            @PathVariable(value = "firstName") String firstName,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction) {
+
+        var sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"));
+
+        return ResponseEntity.ok(service.findByName(firstName, pageable));
     }
 }
