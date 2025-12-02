@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.github.controllers.docs.PersonControllerDocs;
 import br.github.data.dto.v1.PersonDTO;
@@ -54,6 +55,12 @@ public class PersonController implements PersonControllerDocs {
     public PersonDTO findById(@PathVariable("id") Long id) {
         var person = service.findById(id);
         return person;
+    }
+
+    @Override
+    @PostMapping(value = "/massCreation")
+    public List<PersonDTO> massCreation(@RequestParam("file") MultipartFile file) {
+        return service.massCreation(file);
     }
 
     @PostMapping
